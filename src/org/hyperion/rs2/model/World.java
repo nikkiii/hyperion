@@ -318,10 +318,11 @@ public class World {
 		int returnCode = 2;
 		if(isPlayerOnline(player.getName())) {
 			returnCode = 5;
-		}
-		if(!players.add(player)) {
-			returnCode = 7;
-			logger.info("Could not register player : " + player + " [world full]");
+		} else {
+			if(!players.add(player)) {
+				returnCode = 7;
+				logger.info("Could not register player : " + player + " [world full]");
+			}
 		}
 		final int fReturnCode = returnCode;
 		PacketBuilder bldr = new PacketBuilder();
