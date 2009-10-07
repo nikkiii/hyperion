@@ -1,6 +1,7 @@
 package org.hyperion.rs2.event.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hyperion.rs2.event.Event;
@@ -47,7 +48,12 @@ public class UpdateEvent extends Event {
 			resetTasks.add(new NPCResetTask(npc));
 		}
 		
-		for(Player player : World.getWorld().getPlayers()) {
+		Iterator<Player> it$ = World.getWorld().getPlayers().iterator();
+		while(it$.hasNext()) {
+			Player player = it$.next();
+			if(!player.getSession().isConnected()) {
+				it$.remove();
+			}
 			tickTasks.add(new PlayerTickTask(player));
 			updateTasks.add(new ConsecutiveTask(new PlayerUpdateTask(player), new NPCUpdateTask(player)));
 			resetTasks.add(new PlayerResetTask(player));
