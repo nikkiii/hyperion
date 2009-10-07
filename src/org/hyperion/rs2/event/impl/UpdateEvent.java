@@ -53,10 +53,11 @@ public class UpdateEvent extends Event {
 			Player player = it$.next();
 			if(!player.getSession().isConnected()) {
 				it$.remove();
+			} else {
+				tickTasks.add(new PlayerTickTask(player));
+				updateTasks.add(new ConsecutiveTask(new PlayerUpdateTask(player), new NPCUpdateTask(player)));
+				resetTasks.add(new PlayerResetTask(player));
 			}
-			tickTasks.add(new PlayerTickTask(player));
-			updateTasks.add(new ConsecutiveTask(new PlayerUpdateTask(player), new NPCUpdateTask(player)));
-			resetTasks.add(new PlayerResetTask(player));
 		}
 		
 		// ticks can no longer be parallel due to region code
