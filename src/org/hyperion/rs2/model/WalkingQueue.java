@@ -16,6 +16,8 @@ import org.hyperion.rs2.util.DirectionUtils;
  * @author Graham Edgecombe
  *
  */
+// TODO implement 'travelback' algorithm so you are unable to noclip while map
+// TODO region is loading?
 public class WalkingQueue {
 	
 	/**
