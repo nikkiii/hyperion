@@ -144,6 +144,11 @@ public class Player extends Entity implements Persistable {
 	 */
 	private final Queue<Packet> pendingPackets = new LinkedList<Packet>();
 	
+	/**
+	 * The request manager which manages trading and duelling requests.
+	 */
+	private final RequestManager requestManager = new RequestManager(this);
+	
 	/*
 	 * Core login details.
 	 */
@@ -235,6 +240,14 @@ public class Player extends Entity implements Persistable {
 		this.uid = details.getUID();
 		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 		this.setTeleporting(true);
+	}
+	
+	/**
+	 * Gets the request manager.
+	 * @return The request manager.
+	 */
+	public RequestManager getRequestManager() {
+		return requestManager;
 	}
 	
 	/**
