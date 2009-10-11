@@ -17,12 +17,33 @@ public class RequestManager {
 		/**
 		 * A trade request.
 		 */
-		TRADE,
+		TRADE("tradereq"),
 		
 		/**
 		 * A duel request.
 		 */
-		DUEL;
+		DUEL("duelreq");
+		
+		/**
+		 * The client-side name of the request.
+		 */
+		private String clientName;
+		
+		/**
+		 * Creates a type of request.
+		 * @param clientName The name of the request client-side.
+		 */
+		private RequestType(String clientName) {
+			this.clientName = clientName;
+		}
+		
+		/**
+		 * Gets the client name.
+		 * @return The client name.
+		 */
+		public String getClientName() {
+			return clientName;
+		}
 		
 	}
 	
