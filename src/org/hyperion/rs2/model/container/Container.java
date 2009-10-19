@@ -222,6 +222,9 @@ public class Container {
 	 */
 	public Item getById(int id) {
 		for(int i = 0; i < items.length; i++) {
+			if(items[i] == null) {
+				continue;
+			}
 			if(items[i].getId() == id) {
 				return items[i];
 			}
