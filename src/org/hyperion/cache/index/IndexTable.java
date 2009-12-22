@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import org.hyperion.cache.Archive;
 import org.hyperion.cache.Cache;
 import org.hyperion.cache.index.impl.MapIndex;
+import org.hyperion.cache.index.impl.StandardIndex;
 
 /**
  * The <code>IndexTable</code> class manages all the <code>Index</code>es in
@@ -19,6 +20,11 @@ public class IndexTable {
 	 * The map indices.
 	 */
 	private MapIndex[] mapIndices;
+	
+	/**
+	 * The object def indices.
+	 */
+	private StandardIndex[] objectDefinitionIndices;
 
 	/**
 	 * Creates the index table.
@@ -26,8 +32,27 @@ public class IndexTable {
 	 * @throws IOException if an I/O error occurs.
 	 */
 	public IndexTable(Cache cache) throws IOException {
+		Archive configArchive = new Archive(cache.getFile(0, 2));
+		initObjectDefIndices(configArchive);
+		
 		Archive versionListArchive = new Archive(cache.getFile(0, 5));
 		initMapIndices(versionListArchive);
+	}
+	
+	/**
+	 * Initialises the object definition indices.
+	 * @param configArchive The config archive.
+	 * @throws IOException if an I/O error occurs.
+	 */
+	private void initObjectDefIndices(Archive configArchive) throws IOException {
+		ByteBuffer buf = configArchive.getFileAsByteBuffer("loc.idx");
+		int objectCount = buf.getShort() & 0xFFFF;
+		objectDefinitionIndices = new StandardIndex[objectCount];
+		int offset = 2;
+		for(int id = 0; id < objectCount; id++) {
+			objectDefinitionIndices[id] = new StandardIndex(id, offset);
+			offset += buf.getShort() & 0xFFFF;
+		}
 	}
 
 	/**
@@ -50,11 +75,28 @@ public class IndexTable {
 	}
 	
 	/**
+	 * Gets all of the object definition indices.
+	 * @return The object definition indices array.
+	 */
+	public StandardIndex[] getObjectDefinitionIndices() {
+		return objectDefinitionIndices;
+	}
+	
+	/**
 	 * Gets all of the map indices.
 	 * @return The map indices array.
 	 */
 	public MapIndex[] getMapIndices() {
 		return mapIndices;
+	}
+	
+	/**
+	 * Gets a single object definition index.
+	 * @param object The object id.
+	 * @return The index.
+	 */
+	public StandardIndex getObjectDefinitionIndex(int object) {
+		return objectDefinitionIndices[object];
 	}
 	
 	/**

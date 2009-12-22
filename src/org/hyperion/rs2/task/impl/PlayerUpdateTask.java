@@ -608,7 +608,7 @@ public class PlayerUpdateTask implements Task {
 			/*
 			 * This indicates that the client should discard the walking queue.
 			 */
-			packet.putBits(1, 1);
+			packet.putBits(1, player.isTeleporting() ? 1 : 0);
 			
 			/*
 			 * This flag indicates if an update block is appended.

@@ -7,6 +7,11 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.pf.AStarPathFinder;
+import org.hyperion.rs2.pf.Path;
+import org.hyperion.rs2.pf.PathFinder;
+import org.hyperion.rs2.pf.TileMap;
+import org.hyperion.rs2.pf.TileMapBuilder;
 
 /**
  * Handles player commands (the ::words).
@@ -34,6 +39,8 @@ public class CommandPacketHandler implements PacketHandler {
 				} else {
 					player.getActionSender().sendMessage("Syntax is ::tele [x] [y] [z].");
 				}
+			} else if(command.equals("pos")) {
+				player.getActionSender().sendMessage("You are at: " + player.getLocation() + ".");
 			} else if(command.equals("item")) {
 				if(args.length == 2 || args.length == 3) {
 					int id = Integer.parseInt(args[1]);
@@ -96,6 +103,19 @@ public class CommandPacketHandler implements PacketHandler {
 					player.getActionSender().sendMessage("PvP combat enabled.");
 				} catch(Exception e) {
 					
+				}
+			} else if(command.startsWith("goto")) {
+				if(args.length == 3) {
+					int x = Integer.parseInt(args[1]);
+					int y = Integer.parseInt(args[2]);
+					
+					TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), 16);
+					TileMap map = bldr.build();
+					
+					PathFinder pf = new AStarPathFinder();
+					Path p = pf.findPath(map, player.getLocation().getX(), player.getLocation().getY(), x, y);
+					
+					System.out.println("Path: " + p);
 				}
 			}
 		} catch(Exception ex) {

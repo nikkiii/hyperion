@@ -21,7 +21,7 @@ public class FileServer {
 	/**
 	 * The HTTP port to listen on.
 	 */
-	public static final int HTTP_PORT = 80;
+	public static final int HTTP_PORT = 8080;
 	
 	/**
 	 * The JAGGRAB port to listen on.
