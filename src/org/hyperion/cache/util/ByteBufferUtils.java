@@ -23,4 +23,18 @@ public class ByteBufferUtils {
 		}
 	}
 
+	/**
+	 * Gets an RS2 string from the buffer.
+	 * @param buf The buffer.
+	 * @return The RS2 string.
+	 */
+	public static String getString(ByteBuffer buf) {
+		StringBuilder bldr = new StringBuilder();
+		char c;
+		while((c = (char) buf.get()) != 10) {
+			bldr.append(c);
+		}
+		return bldr.toString();
+	}
+
 }

@@ -1,4 +1,4 @@
-package org.hyperion.cache.map;
+package org.hyperion.cache.obj;
 
 import org.hyperion.rs2.model.GameObjectDefinition;
 

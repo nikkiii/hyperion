@@ -38,7 +38,7 @@ public class RS2Server {
 	private static final GameEngine engine = new GameEngine();
 
 	/**
-	 * Cretaes the server and the <code>GameEngine</code> and initializes the
+	 * Creates the server and the <code>GameEngine</code> and initializes the
 	 * <code>World</code>.
 	 * @throws IOException if an I/O error occurs loading the world.
 	 * @throws ClassNotFoundException if a class the world loads was not found.

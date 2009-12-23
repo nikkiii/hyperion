@@ -73,7 +73,7 @@ public class TileMapBuilder {
 					// object is in range, so add its info to the tile map
 					switch(obj.getType()) {
 					case 5:
-						/* side directions on walls */
+						/* side decorations on walls */
 						break;
 					case 10:
 					case 11:
