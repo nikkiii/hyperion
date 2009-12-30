@@ -60,19 +60,40 @@ public class GameObjectDefinition {
 	private int sizeY;
 	
 	/**
+	 * Solid flag.
+	 */
+	private boolean solid;
+	
+	/**
+	 * Walkable flag.
+	 */
+	private boolean walkable;
+	
+	/**
+	 * 'Has actions' flag.
+	 */
+	private boolean hasActions;
+	
+	/**
 	 * Creates the definition.
 	 * @param id The id.
 	 * @param name The name of the object.
 	 * @param desc The description of the object.
 	 * @param sizeX The x size of the object.
 	 * @param sizeY The y size of the object.
+	 * @param isSolid Solid flag.
+	 * @param isWalkable  Walkable flag.
+	 * @param hasActions Flag which indicates if this object has any actions.
 	 */
-	public GameObjectDefinition(int id, String name, String desc, int sizeX, int sizeY) {
+	public GameObjectDefinition(int id, String name, String desc, int sizeX, int sizeY, boolean isSolid, boolean isWalkable, boolean hasActions) {
 		this.id = id;
 		this.name = name;
 		this.desc = desc;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+		this.solid = isSolid;
+		this.walkable = isWalkable;
+		this.hasActions = hasActions;
 	}
 	
 	/**
@@ -113,6 +134,30 @@ public class GameObjectDefinition {
 	 */
 	public int getSizeY() {
 		return sizeY;
+	}
+	
+	/**
+	 * Checks if this object is solid.
+	 * @return The solid flag.
+	 */
+	public boolean isSolid() {
+		return solid;
+	}
+	
+	/**
+	 * Checks if this object is walkable.
+	 * @return The walkable flag.
+	 */
+	public boolean isWalkable() {
+		return walkable;
+	}
+	
+	/**
+	 * Checks if this object has any actions.
+	 * @return A flag indicating that this object has some actions.
+	 */
+	public boolean hasActions() {
+		return hasActions;
 	}
 	
 }

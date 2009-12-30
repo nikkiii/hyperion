@@ -37,29 +37,11 @@ public class Region {
 	private List<GameObject> objects = new LinkedList<GameObject>();
 	
 	/**
-	 * Clipping masks.
-	 */
-	private int[][] clippingMasks = new int[RegionManager.REGION_SIZE][RegionManager.REGION_SIZE];
-	
-	/**
 	 * Creates a region.
 	 * @param coordinate The coordinate.
 	 */
 	public Region(RegionCoordinates coordinate) {
 		this.coordinate = coordinate;
-		for(int i = 0; i < clippingMasks.length; i++) {
-			for(int j = 0; j < clippingMasks[i].length; j++) {
-				clippingMasks[i][j] = 0x1000000;
-			}
-		}
-	}
-	
-	/**
-	 * Gets the clipping masks array.
-	 * @return The clipping masks array.
-	 */
-	public int[][] getClippingMasks() {
-		return clippingMasks;
 	}
 	
 	/**

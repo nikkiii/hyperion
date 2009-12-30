@@ -62,4 +62,12 @@ public class Point {
 		return Point.class.getName() + " [x=" + x + ", y=" + y + "]";
 	}
 	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
 }

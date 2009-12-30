@@ -48,7 +48,7 @@ public class RS2Server {
 	public RS2Server() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		World.getWorld().init(engine);
 		acceptor.setHandler(new ConnectionHandler());
-		acceptor.getFilterChain().addFirst("throttleFilter", new ConnectionThrottleFilter());
+		//acceptor.getFilterChain().addFirst("throttleFilter", new ConnectionThrottleFilter());
 	}
 
 	/**

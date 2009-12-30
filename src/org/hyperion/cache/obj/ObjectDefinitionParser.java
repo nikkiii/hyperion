@@ -61,51 +61,54 @@ public class ObjectDefinitionParser {
 			String desc = "null";
 			int sizeX = 1;
 			int sizeY = 1;
+			boolean isSolid = true;
+			boolean isWalkable = true;
+			boolean hasActions = false;
 				
 	outer_loop:
+			do {
+				int configCode;
 				do {
-					int configCode;
-					do {
-						configCode = buf.get() & 0xFF;
-						if(configCode == 0) {
-							break outer_loop;
+					configCode = buf.get() & 0xFF;
+					if(configCode == 0) {
+						break outer_loop;
+					}
+					switch(configCode) {
+					case 1:
+						int someCounter = buf.get() & 0xFF;
+						for(int i = 0; i < someCounter; i++) {
+							buf.getShort();
+							buf.get();
 						}
-						switch(configCode) {
-						case 1:
-							int someCounter = buf.get() & 0xFF;
-							for(int i = 0; i < someCounter; i++) {
-								buf.getShort();
-								buf.get();
-							}
-							break;
-						case 2:
-							name = ByteBufferUtils.getString(buf);
-							break;
-						case 3:
-							desc = ByteBufferUtils.getString(buf);
-							break;
-						case 5:
-							someCounter = buf.get() & 0xFF;
-							for(int i = 0; i < someCounter; i++) {
-								buf.getShort();
-							}
-							break;
-						case 14:
-							sizeX = buf.get() & 0xFF;
-							break;
-						case 15:
-							sizeY = buf.get() & 0xFF;
-							break;
-						case 17:
-							// solid?
 						break;
+					case 2:
+						name = ByteBufferUtils.getString(buf);
+						break;
+					case 3:
+						desc = ByteBufferUtils.getString(buf);
+						break;
+					case 5:
+						someCounter = buf.get() & 0xFF;
+						for(int i = 0; i < someCounter; i++) {
+							buf.getShort();
+						}
+						break;
+					case 14:
+						sizeX = buf.get() & 0xFF;
+						break;
+					case 15:
+						sizeY = buf.get() & 0xFF;
+						break;
+					case 17:
+						isSolid = false;
+					break;
 					case 18:
-						// non walkable?
+						isWalkable = false;
 						break;
 					case 19:
 						// has actions?
 						if(buf.get() == 1) {
-							// be true
+							hasActions = true;
 						}
 						break;
 					case 21:
@@ -199,7 +202,7 @@ public class ObjectDefinitionParser {
 				}
 			} while(true);
 			
-			listener.objectDefinitionParsed(new GameObjectDefinition(id, name, desc, sizeX, sizeY));
+			listener.objectDefinitionParsed(new GameObjectDefinition(id, name, desc, sizeX, sizeY, isSolid, isWalkable, hasActions));
 		}
 	}
 

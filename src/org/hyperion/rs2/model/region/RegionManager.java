@@ -36,48 +36,6 @@ public class RegionManager {
 	private Map<RegionCoordinates, Region> activeRegions = new HashMap<RegionCoordinates, Region>();
 	
 	/**
-	 * Gets a clipping mask.
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
-	 * @return The mask.
-	 */
-	public int getClippingMask(int x, int y) {
-		int rx = x / REGION_SIZE;
-		int ry = y / REGION_SIZE;
-		int lx = x % REGION_SIZE;
-		int ly = y % REGION_SIZE;
-		return getRegion(rx, ry).getClippingMasks()[lx][ly];
-	}
-	
-	/**
-	 * Sets a clipping mask.
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
-	 * @param mask The mask.
-	 */
-	public void setClippingMask(int x, int y, int mask) {
-		int rx = x / REGION_SIZE;
-		int ry = y / REGION_SIZE;
-		int lx = x % REGION_SIZE;
-		int ly = y % REGION_SIZE;
-		getRegion(rx, ry).getClippingMasks()[lx][ly] = mask;
-	}
-	
-	/**
-	 * Flags a clipping mask.
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
-	 * @param mask The mask.
-	 */
-	public void flagClippingMask(int x, int y, int mask) {
-		int rx = x / REGION_SIZE;
-		int ry = y / REGION_SIZE;
-		int lx = x % REGION_SIZE;
-		int ly = y % REGION_SIZE;
-		getRegion(rx, ry).getClippingMasks()[lx][ly] |= mask;
-	}
-	
-	/**
 	 * Gets the local players around an entity.
 	 * @param entity The entity.
 	 * @return The collection of local players.

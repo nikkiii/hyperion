@@ -5,11 +5,14 @@ import org.hyperion.rs2.model.Graphic;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.pf.AStarPathFinder;
 import org.hyperion.rs2.pf.Path;
 import org.hyperion.rs2.pf.PathFinder;
+import org.hyperion.rs2.pf.Point;
+import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
 
@@ -20,7 +23,6 @@ import org.hyperion.rs2.pf.TileMapBuilder;
  */
 public class CommandPacketHandler implements PacketHandler {
 
-	@SuppressWarnings("static-access")
 	@Override
 	public void handle(Player player, Packet packet) {
 		String commandString = packet.getRS2String();
@@ -73,7 +75,7 @@ public class CommandPacketHandler implements PacketHandler {
 			} else if(command.equals("bank")) {
 				Bank.open(player);
 			} else if(command.equals("max")) {
-				for(int i = 0; i <= player.getSkills().SKILL_COUNT; i++) {
+				for(int i = 0; i <= Skills.SKILL_COUNT; i++) {
 					player.getSkills().setLevel(i, 99);
 					player.getSkills().setExperience(i, 13034431);
 				}
@@ -84,7 +86,7 @@ public class CommandPacketHandler implements PacketHandler {
 				try {
 					player.getSkills().setLevel(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 					player.getSkills().setExperience(Integer.parseInt(args[1]), player.getSkills().getXPForLevel(Integer.parseInt(args[2])) + 1);
-					player.getActionSender().sendMessage(player.getSkills().SKILL_NAME[Integer.parseInt(args[1])] + " level is now " + Integer.parseInt(args[2]) + ".");	
+					player.getActionSender().sendMessage(Skills.SKILL_NAME[Integer.parseInt(args[1])] + " level is now " + Integer.parseInt(args[2]) + ".");	
 				} catch(Exception e) {
 					e.printStackTrace();
 					player.getActionSender().sendMessage("Syntax is ::lvl [skill] [lvl].");				
@@ -92,7 +94,7 @@ public class CommandPacketHandler implements PacketHandler {
 			} else if(command.startsWith("skill")) {
 				try {
 					player.getSkills().setLevel(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-					player.getActionSender().sendMessage(player.getSkills().SKILL_NAME[Integer.parseInt(args[1])] + " level is temporarily boosted to " + Integer.parseInt(args[2]) + ".");	
+					player.getActionSender().sendMessage(Skills.SKILL_NAME[Integer.parseInt(args[1])] + " level is temporarily boosted to " + Integer.parseInt(args[2]) + ".");	
 				} catch(Exception e) {
 					e.printStackTrace();
 					player.getActionSender().sendMessage("Syntax is ::skill [skill] [lvl].");				
@@ -106,17 +108,37 @@ public class CommandPacketHandler implements PacketHandler {
 				}
 			} else if(command.startsWith("goto")) {
 				if(args.length == 3) {
-					int x = Integer.parseInt(args[1]);
-					int y = Integer.parseInt(args[2]);
-					
-					TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), 16);
-					TileMap map = bldr.build();
-					
-					PathFinder pf = new AStarPathFinder();
-					Path p = pf.findPath(map, player.getLocation().getX(), player.getLocation().getY(), x, y);
-					
-					System.out.println("Path: " + p);
+					try {
+						int radius = 16;
+						
+						int x = Integer.parseInt(args[1]) - player.getLocation().getX() + radius;
+						int y = Integer.parseInt(args[2]) - player.getLocation().getY() + radius;
+												
+						TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), radius);
+						TileMap map = bldr.build();
+						
+						PathFinder pf = new AStarPathFinder();
+						Path p = pf.findPath(player.getLocation(), radius, map, radius, radius, x, y);
+						
+						if(p == null) return;
+												
+						player.getWalkingQueue().reset();
+						for(Point p2 : p.getPoints()) {
+							player.getWalkingQueue().addStep(p2.getX(), p2.getY());
+						}
+					} catch(Throwable ex) {
+						ex.printStackTrace();
+					}
 				}
+			} else if(command.startsWith("tmask")) {
+				int radius = 0;
+				TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), radius);
+				TileMap map = bldr.build();
+				Tile t = map.getTile(0, 0);
+				player.getActionSender().sendMessage("N: " + t.isNorthernTraversalPermitted() +
+					" E: " + t.isEasternTraversalPermitted() +
+					" S: " + t.isSouthernTraversalPermitted() +
+					" W: " + t.isWesternTraversalPermitted());
 			}
 		} catch(Exception ex) {
 			player.getActionSender().sendMessage("Error while processing command.");

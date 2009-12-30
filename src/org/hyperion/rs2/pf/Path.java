@@ -13,7 +13,7 @@ public class Path {
 	/**
 	 * The queue of points.
 	 */
-	private final Deque<Point> tiles = new LinkedList<Point>();
+	private Deque<Point> tiles = new LinkedList<Point>();
 	
 	/**
 	 * Creates an empty path.
@@ -27,12 +27,7 @@ public class Path {
 	 * @param p The point to add.
 	 */
 	public void addPoint(Point p) {
-		Point p2 = tiles.peekLast();
-		if(p2 != null && p2.equals(p)) {
-			return;
-		} else {
-			tiles.add(p);
-		}
+		tiles.addFirst(p);
 	}
 	
 	/**
