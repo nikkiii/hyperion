@@ -1,7 +1,7 @@
-hyperion
+Hyperion
 ========
 
-Hyperion: the open-source Java gameserver suite
+The open-source Java gameserver suite
 
 ### About
 
