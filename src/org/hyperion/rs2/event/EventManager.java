@@ -46,6 +46,8 @@ public class EventManager {
 				long start = System.currentTimeMillis();
 				if(event.isRunning()) {
 					event.execute();
+				} else {
+					return;
 				}
 				long elapsed = System.currentTimeMillis() - start;
 				long remaining = event.getDelay() - elapsed;
